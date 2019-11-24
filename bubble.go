@@ -1,8 +1,8 @@
 package sorting
 
-func Bubble(sortables []Sortable) []Sortable {
+func Bubble(sortables []interface{}, greaterFn func(interface{}, interface{}) bool) []interface{} {
 
-	var temp Sortable
+	var temp interface{}
 	swapped := 1
 
 	for swapped > 0 {
@@ -11,7 +11,7 @@ func Bubble(sortables []Sortable) []Sortable {
 
 		for i := 0; i < len(sortables)-1; i++ {
 
-			if sortables[i].Greater(sortables[i], sortables[i+1]) {
+			if greaterFn(sortables[i], sortables[i+1]) {
 
 				temp = sortables[i]
 				sortables[i] = sortables[i+1]
