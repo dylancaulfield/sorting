@@ -32,12 +32,13 @@ func BenchmarkBubble(b *testing.B) {
 	}
 
 }
+
 func BenchmarkMerge(b *testing.B) {
 
 	localData := data
 
 	for i := 0; i < b.N; i++ {
-		Merge(&localData, intGreater)
+		Merge(&localData, 0, len(localData)-1, intGreater)
 	}
 
 }
