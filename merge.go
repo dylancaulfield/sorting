@@ -6,7 +6,7 @@ func Merge(values *[]interface{}, l int, r int, greaterFn func(interface{}, inte
 		return
 	}
 
-	m := (r - l) / 2
+	m := (r + l) / 2
 
 	Merge(values, l, m, greaterFn)
 	Merge(values, m+1, r, greaterFn)
