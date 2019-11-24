@@ -1,79 +1,79 @@
 package sorting
 
-func Merge(values *[]interface{}, greaterFn func(interface{}, interface{}) bool) {
+func Merge(values *[]interface{}, l int, r int, greaterFn func(interface{}, interface{}) bool) {
 
-	if len(*values) < 2 {
+	if r-l < 2 {
 		return
 	}
 
-	if len(*values) == 2 {
+	m := (r - l) / 2
 
-		if greaterFn((*values)[0], (*values)[1]) {
+	Merge(values, l, m, greaterFn)
+	Merge(values, m+1, r, greaterFn)
 
-			(*values)[0], (*values)[1] = (*values)[1], (*values)[0]
-			return
-
-		} else {
-
-			return
-
-		}
-
-	}
-
-	firstHalf := (*values)[:len(*values)/2]
-	secondHalf := (*values)[len(*values)/2:]
-
-	Merge(&firstHalf, greaterFn)
-	Merge(&secondHalf, greaterFn)
-
-	merged := mergeTogether(&firstHalf, &secondHalf, greaterFn)
-
-	*values = merged
+	mergeTogether(values, l, r, greaterFn)
 
 }
 
-func mergeTogether(firstHalf, secondHalf *[]interface{}, greaterFn func(interface{}, interface{}) bool) []interface{} {
+func mergeTogether(values *[]interface{}, l int, r int, greaterFn func(interface{}, interface{}) bool) {
 
-	var i, j = 0, 0
+	m := (r + l) / 2
 
-	merged := make([]interface{}, len(*firstHalf)+len(*secondHalf))
+	sizeLeft := m - l + 1
+	sizeRight := r - m
 
-	for i+j < len(*firstHalf)+len(*secondHalf) {
+	left := make([]interface{}, sizeLeft)
+	right := make([]interface{}, sizeRight)
 
-		if i == len(*firstHalf) {
+	for i := 0; i < sizeLeft; i++ {
 
-			for j = j; j < len(*secondHalf); j++ {
-				merged[i+j] = (*secondHalf)[j]
-			}
+		left[i] = (*values)[i+l]
 
-			break
+	}
 
-		} else if j == len(*secondHalf) {
+	for i := 0; i < sizeRight; i++ {
 
-			for i = i; i < len(*firstHalf); i++ {
-				merged[i+j] = (*firstHalf)[i]
-			}
+		right[i] = (*values)[i+m+1]
 
-			break
-		}
+	}
 
-		if greaterFn((*firstHalf)[i], (*secondHalf)[j]) {
+	i := 0
+	j := 0
+	k := l
 
-			merged[i+j] = (*secondHalf)[j]
+	for i < sizeLeft && j < sizeRight {
+
+		if greaterFn(left[i], right[j]) {
+
+			(*values)[k] = right[j]
 
 			j++
-
+			k++
 		} else {
 
-			merged[i+j] = (*firstHalf)[i]
+			(*values)[k] = left[i]
 
 			i++
-
+			k++
 		}
 
 	}
 
-	return merged
+	for i < sizeLeft {
 
+		(*values)[k] = left[i]
+
+		i++
+		k++
+	}
+
+	for j < sizeRight {
+
+		(*values)[k] = right[j]
+
+		j++
+		k++
+	}
+
+	return
 }
