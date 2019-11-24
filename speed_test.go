@@ -17,16 +17,27 @@ func generateIntegers(n int) []interface{} {
 
 }
 
+var data = generateIntegers(100000)
+
 func intGreater(a, b interface{}) bool {
 	return a.(int) > b.(int)
 }
 
 func BenchmarkBubble(b *testing.B) {
 
-	data := generateIntegers(1000)
+	localData := data
 
-	for i := 0; i < 1; i++ {
-		Bubble(&data, intGreater)
+	for i := 0; i < b.N; i++ {
+		Bubble(&localData, intGreater)
+	}
+
+}
+func BenchmarkMerge(b *testing.B) {
+
+	localData := data
+
+	for i := 0; i < b.N; i++ {
+		Merge(&localData, intGreater)
 	}
 
 }
